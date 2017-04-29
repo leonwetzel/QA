@@ -18,28 +18,44 @@ args = parser.parse_args()
 url = "https://query.wikidata.org/sparql"
 
 # Execute query based on argument
+# TODO: make dynamic?
 if args.ID == 1:
-    question = "What is tiramisu?"
+    # NOTE:
+    # Question has been altered, since it was difficult the rather open question
+    # 'What is tiramisu?'.
+    question = "What are typical Italian desserts?"
 
     query = '''
-    SELECT ?countryLabel ?capitalLabel WHERE {
-        ?country wdt:P36 ?capital .
-        ?country wdt:P31 wd:Q6256 .
-
-        SERVICE wikibase:label {
-            bd:serviceParam wikibase:language "en" .
-        }
+    SELECT ?foodLabel WHERE {
+        ?food wdt:P279 wd:Q182940.
+        ?food wdt:P495 wd:Q38.
+        SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
     }'''
 
     data = requests.get(url, params={'query': query, 'format': 'json'}).json()
 
+    print(question)
     for item in data['results']['bindings']:
-        answer = item['countryLabel']['value']
-        print('{}\n{}'.format(question, answer))
+        answer = item['foodLabel']['value']
+        print('{}'.format(answer))
 
 elif args.ID == 2:
     question = "Which colours can an apple have?"
-    print("ham")
+
+    query = '''
+    SELECT ?foodLabel WHERE {
+        ?food wdt:P279 wd:Q182940.
+        ?food wdt:P495 wd:Q38.
+        SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
+    }'''
+
+    data = requests.get(url, params={'query': query, 'format': 'json'}).json()
+
+    print(question)
+    for item in data['results']['bindings']:
+        answer = item['foodLabel']['value']
+        print('{}'.format(answer))
+
 elif args.ID == 3:
     question = "What is the scientific name of pear?"
     print("jam")
@@ -66,15 +82,3 @@ elif args.ID == 10:
     print("jam")
 else:
     print("Unable to execute query.")
-
-query = '''
-SELECT ?countryLabel ?capitalLabel WHERE {
-    ?country wdt:P36 ?capital .
-    ?country wdt:P31 wd:Q6256 .
-
-    SERVICE wikibase:label {
-        bd:serviceParam wikibase:language "en" .
-    }
-}'''
-
-data = requests.get(url, params={'query': query, 'format': 'json'}).json()
