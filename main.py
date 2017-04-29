@@ -21,7 +21,7 @@ url = "https://query.wikidata.org/sparql"
 # TODO: make dynamic?
 if args.ID == 1:
     # NOTE:
-    # Question has been altered, since it was difficult the rather open question
+    # Question has been altered, since it was difficult to answer the rather open question
     # 'What is tiramisu?'.
     question = "What are typical Italian desserts?"
 
@@ -43,17 +43,17 @@ elif args.ID == 2:
     question = "Which colours can an apple have?"
 
     query = '''
-    SELECT ?foodLabel WHERE {
-        ?food wdt:P279 wd:Q182940.
-        ?food wdt:P495 wd:Q38.
-        SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
+    SELECT DISTINCT ?colorLabel WHERE {
+        ?item wdt:P31/wdt:P279* wd:Q89 ;
+        wdt:P462 ?color ;
+        SERVICE wikibase:label { bd:serviceParam wikibase:language "en" . }
     }'''
 
     data = requests.get(url, params={'query': query, 'format': 'json'}).json()
 
     print(question)
     for item in data['results']['bindings']:
-        answer = item['foodLabel']['value']
+        answer = item['colorLabel']['value']
         print('{}'.format(answer))
 
 elif args.ID == 3:
