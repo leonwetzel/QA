@@ -58,7 +58,20 @@ elif args.ID == 2:
 
 elif args.ID == 3:
     question = "What is the scientific name of pear?"
-    print("jam")
+
+    query = '''
+    SELECT ?itemLabel WHERE {
+        wd:Q13099586 wdt:P1582 ?item
+        SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
+    }'''
+
+    data = requests.get(url, params={'query': query, 'format': 'json'}).json()
+
+    print(question)
+    for item in data['results']['bindings']:
+        answer = item['itemLabel']['value']
+        print('{}'.format(answer))
+
 elif args.ID == 4:
     question = "Which material is used for producing dog food?"
     print("ham")
