@@ -74,10 +74,36 @@ elif args.ID == 3:
 
 elif args.ID == 4:
     question = "Which material is used for producing dog food?"
-    print("ham")
+
+    query = '''
+    SELECT ?itemLabel WHERE {
+        wd:Q38420 wdt:P186 ?item.
+        SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
+    }'''
+
+    data = requests.get(url, params={'query': query, 'format': 'json'}).json()
+
+    print(question)
+    for item in data['results']['bindings']:
+        answer = item['itemLabel']['value']
+        print('{}'.format(answer))
+
 elif args.ID == 5:
     question = "How is honey produced?"
-    print("jam")
+
+    query = '''
+    SELECT ?itemLabel WHERE {
+        wd:Q10987 wdt:P2079 ?item.
+        SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
+    }'''
+
+    data = requests.get(url, params={'query': query, 'format': 'json'}).json()
+
+    print(question)
+    for item in data['results']['bindings']:
+        answer = item['itemLabel']['value']
+        print('{}'.format(answer))
+
 elif args.ID == 6:
     question = "Is cucumber considered fruit or vegetable?"
     print("ham")
