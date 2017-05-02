@@ -110,17 +110,16 @@ elif args.ID == 6:
     # The description says: 'fruit used as vegetable'
     question = "Is cucumber considered fruit or vegetable?"
 
-    query = '''
-        SELECT ?itemLabel WHERE {
-            wd:Q2735883 wdt:P279 ?item.
-            SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
+    query = '''        
+        SELECT ?label WHERE { wd:Q2735883 schema:description ?label.
+            FILTER(LANG(?label) = "en")
         }'''
 
     data = requests.get(url, params={'query': query, 'format': 'json'}).json()
 
     print(question)
     for item in data['results']['bindings']:
-        answer = item['itemLabel']['value']
+        answer = item['label']['value']
         print('{}'.format(answer))
 
 elif args.ID == 7:
@@ -143,16 +142,15 @@ elif args.ID == 8:
     question = "What is bouillon?"
 
     query = '''
-        SELECT ?itemLabel WHERE {
-            wd:Q4949468 wdt:P31 ?item.
-            SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
+        SELECT ?label WHERE { wd:Q4949468 schema:description ?label.
+            FILTER(LANG(?label) = "en")
         }'''
 
     data = requests.get(url, params={'query': query, 'format': 'json'}).json()
 
     print(question)
     for item in data['results']['bindings']:
-        answer = item['itemLabel']['value']
+        answer = item['label']['value']
         print('{}'.format(answer))
 
 elif args.ID == 9:
