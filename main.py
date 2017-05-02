@@ -105,19 +105,85 @@ elif args.ID == 5:
         print('{}'.format(answer))
 
 elif args.ID == 6:
+    # NOTE:
+    # Wikidata considers cucumber as a subclass of both fruit and vegetable!
+    # The description says: 'fruit used as vegetable'
     question = "Is cucumber considered fruit or vegetable?"
-    print("ham")
+
+    query = '''
+        SELECT ?itemLabel WHERE {
+            wd:Q2735883 wdt:P279 ?item.
+            SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
+        }'''
+
+    data = requests.get(url, params={'query': query, 'format': 'json'}).json()
+
+    print(question)
+    for item in data['results']['bindings']:
+        answer = item['itemLabel']['value']
+        print('{}'.format(answer))
+
 elif args.ID == 7:
     question = "Which nut causes peanut allergy?"
-    print("jam")
+
+    query = '''
+        SELECT ?itemLabel WHERE {
+            wd:Q7157933 wdt:P828 ?item.
+            SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
+        }'''
+
+    data = requests.get(url, params={'query': query, 'format': 'json'}).json()
+
+    print(question)
+    for item in data['results']['bindings']:
+        answer = item['itemLabel']['value']
+        print('{}'.format(answer))
+
 elif args.ID == 8:
     question = "What is bouillon?"
-    print("jam")
+
+    query = '''
+        SELECT ?itemLabel WHERE {
+            wd:Q4949468 wdt:P31 ?item.
+            SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
+        }'''
+
+    data = requests.get(url, params={'query': query, 'format': 'json'}).json()
+
+    print(question)
+    for item in data['results']['bindings']:
+        answer = item['itemLabel']['value']
+        print('{}'.format(answer))
+
 elif args.ID == 9:
     question = "Where does pasta come from?"
-    print("ham")
+
+    query = '''
+        SELECT ?itemLabel WHERE {
+            wd:Q178 wdt:P495 ?item.
+            SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
+        }'''
+
+    data = requests.get(url, params={'query': query, 'format': 'json'}).json()
+
+    print(question)
+    for item in data['results']['bindings']:
+        answer = item['itemLabel']['value']
+        print('{}'.format(answer))
+
 elif args.ID == 10:
     question = "Of which ingredients does apple pie consist?"
-    print("jam")
+    query = '''
+        SELECT ?itemLabel WHERE {
+            wd:Q1068034 wdt:P527 ?item.
+            SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
+        }'''
+
+    data = requests.get(url, params={'query': query, 'format': 'json'}).json()
+
+    print(question)
+    for item in data['results']['bindings']:
+        answer = item['itemLabel']['value']
+        print('{}'.format(answer))
 else:
     print("Unable to execute query.")
